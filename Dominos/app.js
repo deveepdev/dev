@@ -1,4 +1,4 @@
-// DOMINOS INSIDER LEARNING APP (QUEBEC, CANADA)
+// DOMINOS CSR APP (QC, CANADA)
 
 const query = document.querySelector(".query")
 const selected = document.querySelector(".selected")
@@ -666,5 +666,6 @@ function NEW_QUERY(exclude) {
         NEW_QUERY(exclude)
     }
 }
+
 
 QUERY_PIZZA_FEAST()
