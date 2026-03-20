@@ -150,7 +150,38 @@ select {
 .good { color: #22c55e; }
 .warn { color: #eab308; }
 .bad  { color: #ef4444; }
+/* Add Row button */
+.addRowBtn {
+    margin-top: 10px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
 
+/* Remove button (small X) */
+.removeRow {
+    background: #ef4444;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-self: end;
+}
+
+/* Make entry layout nicer */
+.entry {
+    position: relative;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -176,50 +207,105 @@ select {
 
 <script>
 
-/* ---------- CREATE UI ---------- */
+/* ---------- CREATE MULTI-ROW UI ---------- */
 function createRow(size, key) {
     return `
-    <div class="card">
+    <div class="card" data-size="${key}">
         <h3>${size}"</h3>
-        <div class="grid">
 
-            <label>Trays</label>
-            <div class="number-control">
-                <button type="button" data-action="dec">-</button>
-                <input type="number" name="tray${key}" min="0">
-                <button type="button" data-action="inc">+</button>
-            </div>
+        <div class="rows"></div>
 
-            <label>Dough</label>
-            <div class="number-control">
-                <button type="button" data-action="dec">-</button>
-                <input type="number" name="dough${key}" min="0">
-                <button type="button" data-action="inc">+</button>
-            </div>
+        <button type="button" class="addRowBtn">+ Add Row</button>
+    </div>`;
+}
 
-            <label class="full">Date</label>
-            <select class="full" name="date${key}">
-                <option value="N/A">Select date</option>
-                <option value="Lun-Sam">Lun-Sam</option>
-                <option value="Mar-Dim">Mar-Dim</option>
-                <option value="Mer-Lun">Mer-Lun</option>
-                <option value="Jeu-Mar">Jeu-Mar</option>
-                <option value="Ven-Mer">Ven-Mer</option>
-                <option value="Sam-Jeu">Sam-Jeu</option>
-                <option value="Dim-Ven">Dim-Ven</option>
-            </select>
+function createEntry(key) {
+    return `
+    <div class="grid entry">
 
+        <label>Trays</label>
+        <div class="number-control">
+            <button type="button" data-action="dec">-</button>
+            <input type="number" name="tray${key}" min="0">
+            <button type="button" data-action="inc">+</button>
         </div>
+
+        <label>Dough</label>
+        <div class="number-control">
+            <button type="button" data-action="dec">-</button>
+            <input type="number" name="dough${key}" min="0">
+            <button type="button" data-action="inc">+</button>
+        </div>
+
+        <label>Date</label>
+        <select name="date${key}">
+            <option value="N/A">Select</option>
+            <option value="Lun-Sam">Lun-Sam</option>
+            <option value="Mar-Dim">Mar-Dim</option>
+            <option value="Mer-Lun">Mer-Lun</option>
+            <option value="Jeu-Mar">Jeu-Mar</option>
+            <option value="Ven-Mer">Ven-Mer</option>
+            <option value="Sam-Jeu">Sam-Jeu</option>
+            <option value="Dim-Ven">Dim-Ven</option>
+        </select>
+
+        <button type="button" class="removeRow">✕</button>
+
     </div>`;
 }
 
 const inputsDiv = document.getElementById("inputs");
+
 inputsDiv.innerHTML =
     createRow(10,10) +
     createRow(12,12) +
     createRow(14,14) +
     createRow(16,16) +
     createRow("PAN","Pan");
+
+/* Add default row to each */
+document.querySelectorAll(".card").forEach(card => {
+    const key = card.dataset.size;
+    const rows = card.querySelector(".rows");
+    rows.innerHTML = createEntry(key);
+});
+
+/* ---------- ADD / REMOVE ROW ---------- */
+document.addEventListener("click", e => {
+
+    /* Add row */
+    if (e.target.classList.contains("addRowBtn")) {
+        const card = e.target.closest(".card");
+        const key = card.dataset.size;
+        card.querySelector(".rows").insertAdjacentHTML("beforeend", createEntry(key));
+    }
+
+    /* Remove row */
+    if (e.target.classList.contains("removeRow")) {
+        e.target.closest(".entry").remove();
+        calc();
+    }
+
+    /* +/- buttons */
+    if (e.target.dataset.action) {
+        const input = e.target.parentElement.querySelector("input");
+        let value = parseInt(input.value) || 0;
+
+        if (e.target.dataset.action === "inc") value++;
+        else value = Math.max(0, value - 1);
+
+        input.value = value;
+        calc();
+    }
+});
+
+/* HOLD */
+let interval;
+document.addEventListener("mousedown", e => {
+    if (!e.target.dataset.action) return;
+    interval = setInterval(() => e.target.click(), 120);
+});
+document.addEventListener("mouseup", () => clearInterval(interval));
 
 /* ---------- DATA ---------- */
 const traySizes = {10:10,12:8,14:6,16:5,pan:6};
@@ -238,57 +324,6 @@ const dates_hours = {
 const form = document.getElementById("form");
 const results = document.getElementById("results");
 
-/* ---------- SAVE / LOAD ---------- */
-function saveData() {
-    const data = Object.fromEntries(new FormData(form));
-    localStorage.setItem("doughData", JSON.stringify(data));
-}
-
-function loadData() {
-    const saved = JSON.parse(localStorage.getItem("doughData"));
-    if (!saved) return;
-
-    for (let key in saved) {
-        if (form.elements[key]) {
-            form.elements[key].value = saved[key];
-        }
-    }
-    calc();
-}
-
-function clearData() {
-    localStorage.removeItem("doughData");
-    form.reset();
-    calc();
-}
-
-document.getElementById("loadBtn").onclick = loadData;
-document.getElementById("clearBtn").onclick = clearData;
-
-form.addEventListener("input", saveData);
-
-/* ---------- +/- BUTTONS ---------- */
-document.addEventListener("click", e => {
-    if (!e.target.dataset.action) return;
-
-    const input = e.target.parentElement.querySelector("input");
-    let value = parseInt(input.value) || 0;
-
-    if (e.target.dataset.action === "inc") value++;
-    else value = Math.max(0, value - 1);
-
-    input.value = value;
-    calc();
-});
-
-/* HOLD */
-let interval;
-document.addEventListener("mousedown", e => {
-    if (!e.target.dataset.action) return;
-    interval = setInterval(() => e.target.click(), 120);
-});
-document.addEventListener("mouseup", () => clearInterval(interval));
-
 /* ---------- CALC ---------- */
 function getStatusClass(hours) {
     if (hours.includes("2/6")) return "good";
@@ -297,54 +332,44 @@ function getStatusClass(hours) {
 }
 
 function calc() {
-    const data = new FormData(form);
-    const day = new Date().getDay();
 
-    function line(size, key, traySize) {
-        const trays = parseInt(data.get(`tray${key}`)) || 0;
-        const dough = parseInt(data.get(`dough${key}`)) || 0;
-        const date = data.get(`date${key}`) || "N/A";
+    function calcSize(key, traySize, label) {
+        const card = document.querySelector(`[data-size="${key}"]`);
 
-        const total = trays * traySize + dough;
-        const hours = dates_hours[date][day];
-        const cls = getStatusClass(hours);
+        let grouped = {};
 
-        return `<div class="${cls}">${size}" → [${total}] (${hours})</div>`;
+        card.querySelectorAll(".entry").forEach(entry => {
+            const trays = parseInt(entry.querySelector(`[name="tray${key}"]`).value) || 0;
+            const dough = parseInt(entry.querySelector(`[name="dough${key}"]`).value) || 0;
+            const date = entry.querySelector(`[name="date${key}"]`).value;
+
+            if (date === "N/A") return;
+
+            const total = trays * traySize + dough;
+
+            if (!grouped[date]) grouped[date] = 0;
+            grouped[date] += total;
+        });
+
+        const parts = Object.entries(grouped)
+            .map(([date, total]) => `[ ${total} ] (${date})`);
+
+        if (parts.length === 0) return `<div>${label}" → —</div>`;
+
+        return `<div>${label}" → ${parts.join(" + ")}</div>`;
     }
 
     results.innerHTML = `
-        ${line(10,10,traySizes[10])}
-        ${line(12,12,traySizes[12])}
-        ${line(14,14,traySizes[14])}
-        ${line(16,16,traySizes[16])}
-        ${line("PAN","Pan",traySizes.pan)}
+        ${calcSize(10,10,10)}
+        ${calcSize(12,8,12)}
+        ${calcSize(14,6,14)}
+        ${calcSize(16,5,16)}
+        ${calcSize("Pan",6,"PAN")}
     `;
 }
 
 form.addEventListener("input", calc);
 calc();
-
-/* ---------- INSTALL APP ---------- */
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById("installBtn").style.display = "block";
-});
-
-document.getElementById("installBtn").addEventListener("click", async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-});
-
-/* Service Worker */
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
 
 </script>
 
