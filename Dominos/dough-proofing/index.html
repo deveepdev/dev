@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dough Proofing</title>
+</head>
+<body>
+
+    <!-- Section -->
+    <datalist id="dateList">
+        <option value="Lun-Sam">
+        <option value="Mar-Dim">
+        <option value="Mer-Lun">
+        <option value="Jeu-Mar">
+        <option value="Ven-Mer">
+        <option value="Sam-Jeu">
+        <option value="Dim-Ven">
+    </datalist>
+    
+    <form id="values">
+        <h1>Domino's Dough Proofing</h1>
+        <div>
+            <label for="tray10">10' Trays</label>
+            <input type="number" name="tray10" id="tray10" value="0" min="0" max="120">
+            <label for="dough10">dough</label>
+            <input type="number" name="dough10" id="dough10" value="0" min="0" max="120">
+
+            <label for="dates10">date</label>
+            <input id="dates10" name="date10" list="dateList" />
+        </div>
+        <div>
+            <label for="tray12">12' Trays</label>
+            <input type="number" name="tray12" id="tray12" value="0" min="0" max="120">
+            <label for="dough12">dough</label>
+            <input type="number" name="dough12" id="dough12" value="0" min="0" max="120">
+
+            <label for="dates12">date</label>
+            <input id="dates12" name="date12" list="dateList" />
+        </div>
+        <div>
+            <label for="tray14">14' Trays</label>
+            <input type="number" name="tray14" id="tray14" value="0" min="0" max="120">
+            <label for="dough14">dough</label>
+            <input type="number" name="dough14" id="dough14" value="0" min="0" max="120">
+
+            <label for="dates14">date</label>
+            <input id="dates14" name="date14" list="dateList" />
+        </div>
+        <div>
+            <label for="tray16">16' Trays</label>
+            <input type="number" name="tray16" id="tray16" value="0" min="0" max="120">
+            <label for="dough16">dough</label>
+            <input type="number" name="dough16" id="dough16" value="0" min="0" max="120">
+
+            <label for="dates16">date</label>
+            <input id="dates16" name="date16" list="dateList" />
+        </div>
+        <div>
+            <label for="trayPan">pan</label>
+            <input type="number" name="trayPan" id="trayPan" value="0" min="0" max="120">
+            <label for="doughPan">dough</label>
+            <input type="number" name="doughPan" id="doughPan" value="0" min="0" max="120">
+
+            <label for="datesPan">date</label>
+            <input id="datesPan" name="datePan" list="dateList" />
+        </div>
+        <button type="submit">Calculate</button>
+    </form>
+
+    <span id="calc-results"></span>
+
+    <script>
+        const currentDay = new Date().getDay()
+        const form = document.getElementById('values')
+        const results = document.getElementById('calc-results')
+
+        const tray_sizes = {
+            in10: 10,
+            in12: 8,
+            in14: 6,
+            in16: 5,
+            pan: 6
+        }
+
+        // 0 = sunday, 1 = monday, 2 = tuesday, 3 = wednesday, 4 = thursday, 5 = friday, 6 = saturday
+        const dates_hours = {
+            'Lun-Sam': {0: "N/A", 1: "2/6", 2: "2/4", 3: "1/2", 4: "0/1", 5: "0/1-2", 6: "0/0"},
+            'Mar-Dim': {0: "0/0", 1: "N/A", 2: "2/6", 3: "2/4", 4: "1/2", 5: "0/1", 6: "0/1-2"},
+            'Mer-Lun': {0: "0/1-2", 1: "0/0", 2: "N/A", 3: "2/6", 4: "2/4", 5: "1/2", 6: "0/1"},
+            'Jeu-Mar': {0: "0/1", 1: "0/1-2", 2: "0/0", 3: "N/A", 4: "2/6", 5: "2/4", 6: "1/2"},
+            'Ven-Mer': {0: "1/2", 1: "0/1", 2: "0/1-2", 3: "0/0", 4: "N/A", 5: "2/6", 6: "2/4"},
+            'Sam-Jeu': {0: "2/4", 1: "1/2", 2: "0/1", 3: "0/1-2", 4: "0/0", 5: "N/A", 6: "2/6"},
+            'Dim-Ven': {0: "2/6", 1: "2/4", 2: "1/2", 3: "0/1", 4: "0/1-2", 5: "0/0", 6: "N/A"},
+            'N/A': {0: "SLCT.DAY", 1: "SLCT.DAY", 2: "SLCT.DAY", 3: "SLCT.DAY", 4: "SLCT.DAY", 5: "SLCT.DAY", 6: "SLCT.DAY"}
+        }
+
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault()
+            const data = new FormData(form)
+
+            const tray10 = data.get('tray10')
+            const dough10 = parseInt(data.get('dough10'), 10);
+            // id date is null or empty string, set it to "N/A"
+            const date10 = data.get('date10') || "N/A"
+
+            const tray12 = data.get('tray12')
+            const dough12 = parseInt(data.get('dough12'), 10);
+            const date12 = data.get('date12') || "N/A"
+
+            const tray14 = data.get('tray14')
+            const dough14 = parseInt(data.get('dough14'), 10);
+            const date14 = data.get('date14') || "N/A"
+
+            const tray16 = data.get('tray16')
+            const dough16 = parseInt(data.get('dough16'), 10);
+            const date16 = data.get('date16') || "N/A"
+
+            const trayPan = data.get('trayPan')
+            const doughPan = parseInt(data.get('doughPan'), 10);
+            const datePan = data.get('datePan') || "N/A"
+
+            console.log([{ tray10, dough10, date10 },
+                { tray12, dough12, date12 },
+                { tray14, dough14, date14 },
+                { tray16, dough16, date16 },
+                { trayPan, doughPan, datePan }
+            ])
+
+
+            console.log(`10' TOTAL-[${tray10*tray_sizes.in10+dough10}] ${dates_hours[date10][currentDay]}`)
+            console.log(`12' TOTAL-[${tray12*tray_sizes.in12+dough12}] ${dates_hours[date12][currentDay]}`)
+            console.log(`14' TOTAL-[${tray14*tray_sizes.in14+dough14}] ${dates_hours[date14][currentDay]}`)
+            console.log(`16' TOTAL-[${tray16*tray_sizes.in16+dough16}] ${dates_hours[date16][currentDay]}`)
+            console.log(`PAN TOTAL-[${trayPan*tray_sizes.pan+doughPan}] ${dates_hours[datePan][currentDay]}`)
+
+            results.innerHTML = `10' [${tray10*tray_sizes.in10+dough10}] ${dates_hours[date10][currentDay]}<br>
+12' [${tray12*tray_sizes.in12+dough12}] ${dates_hours[date12][currentDay]}<br>
+14' [${tray14*tray_sizes.in14+dough14}] ${dates_hours[date14][currentDay]}<br>
+16' [${tray16*tray_sizes.in16+dough16}] ${dates_hours[date16][currentDay]}<br>
+PAN [${trayPan*tray_sizes.pan+doughPan}] ${dates_hours[datePan][currentDay]}`
+        })
+    </script>
+
+</body>
+</html>
