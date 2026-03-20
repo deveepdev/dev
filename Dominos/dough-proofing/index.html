@@ -147,10 +147,7 @@ select {
     font-size: 15px;
 }
 
-.good { color: #22c55e; }
-.warn { color: #eab308; }
-.bad  { color: #ef4444; }
-/* Add Row button */
+
 .addRowBtn {
     margin-top: 10px;
     padding: 8px;
@@ -172,7 +169,7 @@ select {
     height: 30px;
     font-size: 16px;
     cursor: pointer;
-    justify-self: end;
+    justify-self: start;
 }
 
 /* Make entry layout nicer */
@@ -182,6 +179,11 @@ select {
     border-bottom: 1px solid #334155;
     margin-bottom: 10px;
 }
+
+.good { color: #22c55e; }
+.warn { color: #eab308; }
+.bad  { color: #ef4444; }
+/* Add Row button */
 </style>
 </head>
 
@@ -351,8 +353,13 @@ function calc() {
             grouped[date] += total;
         });
 
+        const today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+
         const parts = Object.entries(grouped)
-            .map(([date, total]) => `[ ${total} ] (${date})`);
+            .map(([date, total]) => {
+                const hours = dates_hours[date]?.[today] || "--";
+                return `[ ${total} ] (${hours})`;
+            });
 
         if (parts.length === 0) return `<div>${label}" → —</div>`;
 
