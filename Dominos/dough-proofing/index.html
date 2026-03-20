@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dough Proofing</title>
 
+<link rel="manifest" href="manifest.json">
+
 <style>
 * {
     margin: 0;
@@ -19,16 +21,39 @@ body {
     padding: 15px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
 .container {
     max-width: 900px;
     margin: auto;
 }
 
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Top buttons */
+.top-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.top-bar button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+}
+
+.install-btn {
+    background: #22c55e;
+    color: black;
+}
+
+/* Cards */
 .card {
     background: #1e293b;
     border-radius: 12px;
@@ -40,6 +65,7 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* Grid */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -89,7 +115,7 @@ label {
     color: white;
 }
 
-/* SELECT FIX */
+/* Dropdown */
 select {
     width: 100%;
     padding: 8px;
@@ -111,11 +137,13 @@ select {
     }
 }
 
+/* Results */
 .results {
     margin-top: 15px;
     padding: 15px;
     background: #020617;
     border-radius: 10px;
+    font-size: 15px;
 }
 
 .good { color: #22c55e; }
@@ -128,17 +156,26 @@ select {
 <body>
 
 <div class="container">
+
 <h1>🍕 Dough Proofing</h1>
+
+<div class="top-bar">
+    <button id="loadBtn">Load Last</button>
+    <button id="clearBtn">Clear</button>
+    <button id="installBtn" class="install-btn" style="display:none;">Install App</button>
+</div>
 
 <form id="form">
 <div id="inputs"></div>
 </form>
 
 <div id="results" class="results"></div>
+
 </div>
 
 <script>
 
+/* ---------- CREATE UI ---------- */
 function createRow(size, key) {
     return `
     <div class="card">
@@ -183,6 +220,7 @@ inputsDiv.innerHTML =
     createRow(16,16) +
     createRow("PAN","Pan");
 
+/* ---------- DATA ---------- */
 const traySizes = {10:10,12:8,14:6,16:5,pan:6};
 
 const dates_hours = {
@@ -199,7 +237,36 @@ const dates_hours = {
 const form = document.getElementById("form");
 const results = document.getElementById("results");
 
-/* +/- click */
+/* ---------- SAVE / LOAD ---------- */
+function saveData() {
+    const data = Object.fromEntries(new FormData(form));
+    localStorage.setItem("doughData", JSON.stringify(data));
+}
+
+function loadData() {
+    const saved = JSON.parse(localStorage.getItem("doughData"));
+    if (!saved) return;
+
+    for (let key in saved) {
+        if (form.elements[key]) {
+            form.elements[key].value = saved[key];
+        }
+    }
+    calc();
+}
+
+function clearData() {
+    localStorage.removeItem("doughData");
+    form.reset();
+    calc();
+}
+
+document.getElementById("loadBtn").onclick = loadData;
+document.getElementById("clearBtn").onclick = clearData;
+
+form.addEventListener("input", saveData);
+
+/* ---------- +/- BUTTONS ---------- */
 document.addEventListener("click", e => {
     if (!e.target.dataset.action) return;
 
@@ -213,7 +280,7 @@ document.addEventListener("click", e => {
     calc();
 });
 
-/* Hold */
+/* HOLD */
 let interval;
 document.addEventListener("mousedown", e => {
     if (!e.target.dataset.action) return;
@@ -221,7 +288,7 @@ document.addEventListener("mousedown", e => {
 });
 document.addEventListener("mouseup", () => clearInterval(interval));
 
-/* Calc */
+/* ---------- CALC ---------- */
 function getStatusClass(hours) {
     if (hours.includes("2/6")) return "good";
     if (hours.includes("1/2") || hours.includes("2/4")) return "warn";
@@ -255,6 +322,28 @@ function calc() {
 
 form.addEventListener("input", calc);
 calc();
+
+/* ---------- INSTALL APP ---------- */
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installBtn").style.display = "block";
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+});
+
+/* Service Worker */
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
 
 </script>
 
