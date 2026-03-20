@@ -375,6 +375,75 @@ function calc() {
     `;
 }
 
+const loadBtn = document.getElementById("loadBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+/* ---------- SAVE DATA ---------- */
+function saveData() {
+    const data = [];
+
+    document.querySelectorAll(".entry").forEach(entry => {
+        const inputs = entry.querySelectorAll("input, select");
+
+        const row = {};
+        inputs.forEach(input => {
+            row[input.name] = input.value;
+        });
+
+        data.push(row);
+    });
+
+    localStorage.setItem("doughData", JSON.stringify(data));
+}
+
+/* ---------- LOAD DATA ---------- */
+function loadData() {
+    const data = JSON.parse(localStorage.getItem("doughData") || "[]");
+
+    if (!data.length) return;
+
+    // Clear existing rows
+    document.querySelectorAll(".rows").forEach(r => r.innerHTML = "");
+
+    data.forEach(row => {
+        const key = Object.keys(row)[0].replace(/[^\dA-Za-z]/g, "").replace("tray", "");
+
+        const card = document.querySelector(`[data-size="${key}"]`);
+        if (!card) return;
+
+        const rowsDiv = card.querySelector(".rows");
+        rowsDiv.insertAdjacentHTML("beforeend", createEntry(key));
+
+        const newEntry = rowsDiv.lastElementChild;
+
+        Object.entries(row).forEach(([name, value]) => {
+            const input = newEntry.querySelector(`[name="${name}"]`);
+            if (input) input.value = value;
+        });
+    });
+
+    calc();
+}
+
+/* ---------- CLEAR DATA ---------- */
+function clearData() {
+    // localStorage.removeItem("doughData");
+
+    document.querySelectorAll(".rows").forEach(rows => {
+        const key = rows.closest(".card").dataset.size;
+        rows.innerHTML = createEntry(key); // reset to 1 row
+    });
+
+    calc();
+}
+
+/* ---------- EVENTS ---------- */
+loadBtn.addEventListener("click", loadData);
+clearBtn.addEventListener("click", clearData);
+
+/* Auto-save on change */
+form.addEventListener("input", saveData);
+
 form.addEventListener("input", calc);
 calc();
 
