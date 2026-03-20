@@ -5,6 +5,41 @@
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dough Proofing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            /* flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif; */
+        }
+
+        #common-input-div {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            height: 30px;
+        }
+
+        .dates {
+            width: 100px;
+            flex-wrap: wrap;
+        }
+
+        #common-input-div > label,
+        #common-input-div > input:not(.dates) { white-space: nowrap; }
+        .dates { flex: 1 1 100%; min-width: 120px; }
+    </style>
 </head>
 <body>
 
@@ -21,50 +56,50 @@
     
     <form id="values">
         <h1>Domino's Dough Proofing</h1>
-        <div>
+        <div id="common-input-div">
             <label for="tray10">10' Trays</label>
-            <input type="number" name="tray10" id="tray10" value="0" min="0" max="120">
+            <input type="number" name="tray10" id="tray" value="0" min="0" max="120">
             <label for="dough10">dough</label>
-            <input type="number" name="dough10" id="dough10" value="0" min="0" max="120">
+            <input type="number" name="dough10" id="dough" value="0" min="0" max="120">
 
             <label for="dates10">date</label>
-            <input id="dates10" name="date10" list="dateList" />
+            <input id="dates10" class="dates" name="date10" list="dateList" />
         </div>
-        <div>
+        <div id="common-input-div">
             <label for="tray12">12' Trays</label>
-            <input type="number" name="tray12" id="tray12" value="0" min="0" max="120">
+            <input type="number" name="tray12" id="tray" value="0" min="0" max="120">
             <label for="dough12">dough</label>
-            <input type="number" name="dough12" id="dough12" value="0" min="0" max="120">
+            <input type="number" name="dough12" id="dough" value="0" min="0" max="120">
 
             <label for="dates12">date</label>
-            <input id="dates12" name="date12" list="dateList" />
+            <input id="dates12" class="dates" name="date12" list="dateList" />
         </div>
-        <div>
+        <div id="common-input-div">
             <label for="tray14">14' Trays</label>
-            <input type="number" name="tray14" id="tray14" value="0" min="0" max="120">
+            <input type="number" name="tray14" id="tray" value="0" min="0" max="120">
             <label for="dough14">dough</label>
-            <input type="number" name="dough14" id="dough14" value="0" min="0" max="120">
+            <input type="number" name="dough14" id="dough" value="0" min="0" max="120">
 
             <label for="dates14">date</label>
-            <input id="dates14" name="date14" list="dateList" />
+            <input id="dates14" class="dates" name="date14" list="dateList" />
         </div>
-        <div>
+        <div id="common-input-div">
             <label for="tray16">16' Trays</label>
-            <input type="number" name="tray16" id="tray16" value="0" min="0" max="120">
+            <input type="number" name="tray16" id="tray" value="0" min="0" max="120">
             <label for="dough16">dough</label>
-            <input type="number" name="dough16" id="dough16" value="0" min="0" max="120">
+            <input type="number" name="dough16" id="dough" value="0" min="0" max="120">
 
             <label for="dates16">date</label>
-            <input id="dates16" name="date16" list="dateList" />
+            <input id="dates16" class="dates" name="date16" list="dateList" />
         </div>
-        <div>
+        <div id="common-input-div">
             <label for="trayPan">pan</label>
-            <input type="number" name="trayPan" id="trayPan" value="0" min="0" max="120">
+            <input type="number" name="trayPan" id="tray" value="0" min="0" max="120">
             <label for="doughPan">dough</label>
-            <input type="number" name="doughPan" id="doughPan" value="0" min="0" max="120">
+            <input type="number" name="doughPan" id="dough" value="0" min="0" max="120">
 
             <label for="datesPan">date</label>
-            <input id="datesPan" name="datePan" list="dateList" />
+            <input id="datesPan" class="dates" name="datePan" list="dateList" />
         </div>
         <button type="submit">Calculate</button>
     </form>
