@@ -205,6 +205,10 @@ select {
     margin-bottom: 10px;
 }
 
+.number-control button {
+    touch-action: manipulation;
+}
+
 .good { color: #22c55e; }
 .warn { color: #eab308; }
 .bad  { color: #ef4444; }
@@ -326,45 +330,54 @@ document.addEventListener("click", e => {
     }
 });
 
-/* HOLD WITH ACCELERATION */
+/* HOLD WITH ACCELERATION (MOBILE + DESKTOP) */
 let holdTimeout;
 let holdInterval;
 let speed = 120;
+let currentTarget = null;
 
-document.addEventListener("mousedown", e => {
-    if (!e.target.dataset.action) return;
+function startHold(target) {
+    if (!target.dataset.action) return;
 
+    currentTarget = target;
     speed = 120;
 
-    // small delay before hold starts (feels more natural)
     holdTimeout = setTimeout(() => {
-
         holdInterval = setInterval(() => {
-            e.target.click();
+            currentTarget.click();
 
             // accelerate
             if (speed > 30) {
                 speed -= 10;
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
-                    e.target.click();
+                    currentTarget.click();
                 }, speed);
             }
 
         }, speed);
+    }, 300);
+}
 
-    }, 300); // delay before auto-repeat starts
-});
-
-document.addEventListener("mouseup", () => {
+function stopHold() {
     clearTimeout(holdTimeout);
     clearInterval(holdInterval);
-});
+    currentTarget = null;
+}
 
-document.addEventListener("mouseleave", () => {
-    clearTimeout(holdTimeout);
-    clearInterval(holdInterval);
-});
+/* Desktop */
+document.addEventListener("mousedown", e => startHold(e.target));
+document.addEventListener("mouseup", stopHold);
+document.addEventListener("mouseleave", stopHold);
+
+/* Mobile */
+document.addEventListener("touchstart", e => {
+    const target = e.target;
+    startHold(target);
+}, { passive: true });
+
+document.addEventListener("touchend", stopHold);
+document.addEventListener("touchcancel", stopHold);
 
 /* ---------- DATA ---------- */
 const traySizes = {10:10,12:8,14:6,16:5,pan:6};
