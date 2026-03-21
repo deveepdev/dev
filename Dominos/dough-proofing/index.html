@@ -9,6 +9,18 @@
 <link rel="manifest" href="manifest.json">
 
 <style>
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    outline: none;
+}
+/* Remove arrows (Firefox) */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
 * {
     margin: 0;
     padding: 0;
@@ -60,6 +72,8 @@ h1 {
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 12px;
+    border-bottom: 1px solid #334155;
+
 }
 
 .card h3 {
@@ -71,6 +85,9 @@ h1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    background-color: rgb(35, 47, 64);
+    padding: 10px;
+    border-radius: 8px;
 }
 
 @media (min-width: 768px) {
@@ -153,8 +170,8 @@ select {
     padding: 8px;
     border: none;
     border-radius: 8px;
-    background: #22c55e;
-    color: black;
+    background: #334155;
+    color: #ffffff;
     cursor: pointer;
     font-weight: bold;
 }
@@ -164,7 +181,7 @@ select {
     background: #ef4444;
     border: none;
     border-radius: 6px;
-    color: white;
+    color: #ffffff;
     width: 30px;
     height: 30px;
     font-size: 16px;
@@ -213,7 +230,7 @@ select {
 function createRow(size, key) {
     return `
     <div class="card" data-size="${key}">
-        <h3>${size}"</h3>
+        <h3>${size}</h3>
 
         <div class="rows"></div>
 
@@ -259,10 +276,10 @@ function createEntry(key) {
 const inputsDiv = document.getElementById("inputs");
 
 inputsDiv.innerHTML =
-    createRow(10,10) +
-    createRow(12,12) +
-    createRow(14,14) +
-    createRow(16,16) +
+    createRow(10+"\"",10) +
+    createRow(12+"\"",12) +
+    createRow(14+"\"",14) +
+    createRow(16+"\"",16) +
     createRow("PAN","Pan");
 
 /* Add default row to each */
