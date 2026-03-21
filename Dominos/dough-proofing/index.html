@@ -17,6 +17,9 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     outline: none;
 }
+select {
+    outline: none;
+}
 /* Remove arrows (Firefox) */
 input[type="number"] {
     -moz-appearance: textfield;
@@ -318,13 +321,45 @@ document.addEventListener("click", e => {
     }
 });
 
-/* HOLD */
-let interval;
+/* HOLD WITH ACCELERATION */
+let holdTimeout;
+let holdInterval;
+let speed = 120;
+
 document.addEventListener("mousedown", e => {
     if (!e.target.dataset.action) return;
-    interval = setInterval(() => e.target.click(), 120);
+
+    speed = 120;
+
+    // small delay before hold starts (feels more natural)
+    holdTimeout = setTimeout(() => {
+
+        holdInterval = setInterval(() => {
+            e.target.click();
+
+            // accelerate
+            if (speed > 30) {
+                speed -= 10;
+                clearInterval(holdInterval);
+                holdInterval = setInterval(() => {
+                    e.target.click();
+                }, speed);
+            }
+
+        }, speed);
+
+    }, 300); // delay before auto-repeat starts
 });
-document.addEventListener("mouseup", () => clearInterval(interval));
+
+document.addEventListener("mouseup", () => {
+    clearTimeout(holdTimeout);
+    clearInterval(holdInterval);
+});
+
+document.addEventListener("mouseleave", () => {
+    clearTimeout(holdTimeout);
+    clearInterval(holdInterval);
+});
 
 /* ---------- DATA ---------- */
 const traySizes = {10:10,12:8,14:6,16:5,pan:6};
