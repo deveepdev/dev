@@ -642,6 +642,34 @@ rows.addEventListener("transitionend", () => {
     rows.style.maxHeight = "none";
 }, { once: true });
 
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault(); // stop automatic prompt
+    deferredPrompt = e;
+
+    // show button
+    installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice.outcome === "accepted") {
+        console.log("User installed app");
+    } else {
+        console.log("User dismissed install");
+    }
+
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+});
+    
 </script>
 
 </body>
