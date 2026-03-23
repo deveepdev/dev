@@ -670,6 +670,9 @@ installBtn.addEventListener("click", async () => {
     installBtn.style.display = "none";
 });
     
+window.addEventListener("appinstalled", () => {
+    installBtn.style.display = "none";
+});
 </script>
 
 </body>
