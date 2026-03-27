@@ -5,7 +5,7 @@ self.addEventListener("install", e => {
         caches.open(CACHE).then(cache =>
             cache.addAll([
                 "./",
-                "./index.html"
+                "./app/index.html"
             ])
         )
     );
