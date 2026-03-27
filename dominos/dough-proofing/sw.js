@@ -1,10 +1,10 @@
-const CACHE = "dough-app-v1";
+const CACHE = "dough-app-v4";
 
 self.addEventListener("install", e => {
     e.waitUntil(
         caches.open(CACHE).then(cache =>
             cache.addAll([
-                "./",
+                "./app",
                 "./app/index.html"
             ])
         )
