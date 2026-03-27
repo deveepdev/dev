@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/x-icon" href="icon.png">
+<link rel="icon" type="image/x-icon" href="../src/icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dough Proofing</title>
@@ -11,13 +11,25 @@
 <style>
 :root {
     --blue0: #3eb2e45c;
-    --blue1: #006792a4;
+    --blue1: #006792;
     --blue2: #002839;
     --blue3: #003146;
-    --blue4: #00121a;
+    --blue4: #000d13;
     --red_original: #D2112C;
-    --red: #b02222;
+    --red: #c73e3e;
+    --text: #e2e8f0;
 }
+
+/* light mode (no good) */
+/* :root {
+--blue0: #d9f1fb;
+--blue1: #0077b6;
+--blue2: #f4f8fb;
+--blue3: #e6eef3;
+--blue4: #cfdbe4;
+    --red: #c73e3e;
+    --text: #020b17;
+} */
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -25,10 +37,13 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 input[type="number"] {
+    user-select: auto;
     outline: none;
+    border: 2px solid var(--blue0);
 }
 select {
     outline: none;
+    border: 2px solid var(--blue0);
 }
 /* Remove arrows (Firefox) */
 input[type="number"] {
@@ -41,16 +56,12 @@ input[type="number"] {
     user-select: none;
 }
 
-input[type="number"] {
-    user-select: auto;
-}
-
 body {
     font-family: Arial, sans-serif;
     background: var(--blue4);
     /* background: linear-gradient(to t, var(--blue4), var(--blue2)); */
 
-    color: #e2e8f0;
+    color: var(--text);
     padding: 0px 15px 15px 15px;
 }
 
@@ -79,7 +90,7 @@ body {
 .menu-btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--text);
     font-size: 22px;
     cursor: pointer;
 
@@ -138,15 +149,10 @@ h1 {
     flex: 1;
     padding: 10px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     background: var(--blue1);
-    color: white;
+    color: var(--text);
     cursor: pointer;
-}
-
-.install-btn {
-    background: #22c55e;
-    color: black;
 }
 
 /* Cards */
@@ -158,8 +164,8 @@ h1 {
     margin-bottom: 12px;
     border-bottom: 1px solid var(--blue1);
     border-left: 1px solid var(--blue1);
-    border-top: 1px solid var(--blue4);
-    border-right: 1px solid var(--blue4);
+    border-right: 1px solid var(--blue3);
+    border-top: 1px solid var(--blue3);
 }
 
 .card h3 {
@@ -198,10 +204,10 @@ label {
     width: 32px;
     height: 32px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     background: var(--blue1);
-    color: white;
-    font-size: 18px;
+    color: var(--text);
+    font-size: 26px;
     cursor: pointer;
 }
 
@@ -213,20 +219,20 @@ label {
     width: 60px;
     text-align: center;
     padding: 6px;
-    border-radius: 6px;
+    border-radius: 4px;
     border: none;
     background: var(--blue4);
-    color: white;
+    color: var(--text);
 }
 
 /* Dropdown */
 select {
     width: 100%;
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 5px;
     border: none;
     background: var(--blue4);
-    color: white;
+    color: var(--text);
     appearance: none;
 }
 
@@ -250,27 +256,25 @@ select {
     font-size: 15px;
 }
 
-
 .addRowBtn {
-    margin-top: 10px;
-    padding: 8px;
+    padding: 12px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     background: var(--blue1);
-    color: #ffffff;
+    color: var(--text);
     cursor: pointer;
-    font-weight: bold;
 }
 
 /* Remove button (small X) */
 .removeRow {
     background: var(--red);
     border: none;
-    border-radius: 6px;
-    color: #ffffff;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
+    border-bottom: 3px solid var(--red);
+    border-radius: 4px;
+    color: var(--text);
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
     cursor: pointer;
     justify-self: start;
 }
@@ -282,6 +286,9 @@ select {
     padding-bottom: 10px;
     border-bottom: 1px solid var(--blue1);
     border-left: 1px solid var(--blue1);
+    border-right: 1px solid var(--blue3);
+    border-top: 1px solid var(--blue3);
+    margin-top: 5px;
     margin-bottom: 10px;
     animation: fadeIn 0.35s ease;
 }
@@ -305,7 +312,71 @@ select {
     overflow: hidden;
     transition: max-height 0.25s ease;
 }
+.results {
+    margin-top: 15px;
+    background: linear-gradient(to top right, var(--blue3), transparent);
+    border: 1px solid var(--blue1);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 14px;
+}
 
+/* Header row */
+.result-header {
+    display: grid;
+    grid-template-columns: 70px 1fr 70px 70px;
+    padding: 8px 10px;
+    font-weight: 600;
+    opacity: 0.8;
+    border-bottom: 1px solid var(--blue1);
+}
+
+/* Each row */
+.result-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 70px 70px;
+    padding: 8px 10px;
+    align-items: center;
+    transition: background 0.15s ease;
+}
+
+/* Zebra striping (very subtle) */
+.result-row:nth-child(even) {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Hover effect (desktop) */
+.result-row:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Columns */
+.col-size {
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.col-date {
+    opacity: 0.75;
+}
+
+.col-total {
+    text-align: right;
+    font-weight: 600;
+}
+
+.col-hours {
+    text-align: right;
+    opacity: 0.6;
+    font-size: 13px;
+}
+
+/* Empty state */
+.empty {
+    padding: 10px;
+    text-align: center;
+    opacity: 0.5;
+}
 /* Add Row button */
 </style>
 </head>
@@ -322,7 +393,7 @@ select {
 <div class="top-bar">
     <button id="loadBtn">Load Last</button>
     <button id="clearBtn">Clear</button>
-    <button id="installBtn" class="install-btn">Install App</button>
+    <button id="installBtn" class="install-btn" style="display:none;">Install App</button>
 </div>
 
 <form id="form">
@@ -339,7 +410,7 @@ select {
 function createRow(size, key) {
     return `
     <div class="card" data-size="${key}">
-        <h3>${size}</h3>
+        <h2>${size}</h2>
 
         <div class="rows"></div>
 
@@ -520,17 +591,13 @@ const form = document.getElementById("form");
 const results = document.getElementById("results");
 
 /* ---------- CALC ---------- */
-function getStatusClass(hours) {
-    if (hours.includes("2/6")) return "good";
-    if (hours.includes("1/2") || hours.includes("2/4")) return "warn";
-    return "bad";
-}
 
 function calc() {
+    const today = new Date().getDay();
+    let rows = "";
 
-    function calcSize(key, traySize, label) {
+    function processSize(key, traySize, label) {
         const card = document.querySelector(`[data-size="${key}"]`);
-
         let grouped = {};
 
         card.querySelectorAll(".entry").forEach(entry => {
@@ -546,25 +613,39 @@ function calc() {
             grouped[date] += total;
         });
 
-        const today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+        Object.entries(grouped).forEach(([date, total]) => {
+            const hours = dates_hours[date]?.[today] || "--";
 
-        const parts = Object.entries(grouped)
-            .map(([date, total]) => {
-                const hours = dates_hours[date]?.[today] || "--";
-                return `[ ${total} ] (${hours})`;
-            });
+            rows += `
+                <div class="result-row">
+                    <div class="col-size">${label}"</div>
+                    <div class="col-date">${date}</div>
+                    <div class="col-total">${total}</div>
+                    <div class="col-hours">${hours}</div>
+                </div>
+            `;
+        });
+    }
 
-        if (parts.length === 0) return `<div>${label}" → —</div>`;
+    processSize(10,10,10);
+    processSize(12,8,12);
+    processSize(14,6,14);
+    processSize(16,5,16);
+    processSize("Pan",8,"PAN");
 
-        return `<div>${label}" → ${parts.join(" + ")}</div>`;
+    if (!rows) {
+        results.innerHTML = `<div class="empty">— No data —</div>`;
+        return;
     }
 
     results.innerHTML = `
-        ${calcSize(10,10,10)}
-        ${calcSize(12,8,12)}
-        ${calcSize(14,6,14)}
-        ${calcSize(16,5,16)}
-        ${calcSize("Pan",8,"PAN")}
+        <div class="result-header">
+            <div>Size</div>
+            <div>Date</div>
+            <div style="text-align:right;">Qty</div>
+            <div style="text-align:right;">Time</div>
+        </div>
+        ${rows}
     `;
 }
 
@@ -640,47 +721,44 @@ form.addEventListener("input", saveData);
 form.addEventListener("input", calc);
 calc();
 
-rows.addEventListener("transitionend", () => {
-    rows.style.maxHeight = "none";
-}, { once: true });
+// rows.addEventListener("transitionend", () => {
+//     rows.style.maxHeight = "none";
+// }, { once: true });
 
 let deferredPrompt;
 const installBtn = document.getElementById("installBtn");
 
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault(); // stop automatic prompt
-    deferredPrompt = e;
+installBtn.style.display = "none";
 
-    // show button
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
     installBtn.style.display = "block";
 });
 
 installBtn.addEventListener("click", async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+        alert("Install not available");
+        return;
+}
 
-    deferredPrompt.prompt();
+deferredPrompt.prompt();
 
-    const choice = await deferredPrompt.userChoice;
+const result = await deferredPrompt.userChoice;
 
-    if (choice.outcome === "accepted") {
-        console.log("User installed app");
-    } else {
-        console.log("User dismissed install");
-    }
+if (result.outcome === "accepted") {
+    console.log("Installed");
+}
 
-    deferredPrompt = null;
+deferredPrompt = null;
     installBtn.style.display = "none";
 });
-    
+
 window.addEventListener("appinstalled", () => {
     installBtn.style.display = "none";
 });
 
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
-    
 </script>
- 
+
 </body>
 </html>

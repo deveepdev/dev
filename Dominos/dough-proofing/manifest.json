@@ -3,12 +3,12 @@
   "short_name": "Dough",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "background_color": "transparent",
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "../src/icon.png",
-      "sizes": "196x196",
+      "src": "../src/icon-newgen.png",
+      "sizes": "400x400",
       "type": "image/png"
     }
   ]
