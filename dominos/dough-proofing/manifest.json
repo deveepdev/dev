@@ -1,7 +1,8 @@
 {
   "name": "Domino's Dough Proofing",
   "short_name": "Dough",
-  "start_url": ".",
+  "start_url": "/dev/app/",
+  "scope": "/dev/app/",
   "display": "standalone",
   "background_color": "#000d13",
   "theme_color": "#000d13",
