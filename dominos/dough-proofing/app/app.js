@@ -369,3 +369,11 @@ deferredPrompt = null;
 window.addEventListener("appinstalled", () => {
     installBtn.style.display = "none";
 });
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/dev/app/sw.js", {
+    scope: "/dev/app/"
+  })
+  .then(() => console.log("SW registered"))
+  .catch(err => console.log("SW error:", err));
+}

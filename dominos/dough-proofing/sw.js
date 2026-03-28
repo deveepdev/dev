@@ -1,4 +1,4 @@
-const CACHE = "dough-app-v1";
+const CACHE = "dough-app-v2";
 
 self.addEventListener("install", e => {
     e.waitUntil(
@@ -12,7 +12,15 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("fetch", e => {
+  if (e.request.mode === "navigate") {
     e.respondWith(
-        caches.match(e.request).then(res => res || fetch(e.request))
+      fetch(e.request).catch(() =>
+        caches.match("/dev/app/index.html")
+      )
     );
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(res => res || fetch(e.request))
+    );
+  }
 });
