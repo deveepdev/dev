@@ -371,8 +371,8 @@ window.addEventListener("appinstalled", () => {
 });
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/dev/app/sw.js", {
-    scope: "/dev/app/"
+  navigator.serviceWorker.register("/dev/dominos/dough-proofing/sw.js", {
+    scope: "/dev/dominos/dough-proofing/"
   })
   .then(() => console.log("SW registered"))
   .catch(err => console.log("SW error:", err));
