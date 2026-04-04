@@ -1,4 +1,12 @@
 const button = document.querySelector(".color-scheme-button");
+const civic = document.querySelector(".civic");
+
+const wrapper = document.querySelector(".civic-wrapper");
+const rims = document.querySelectorAll(".rim");
+
+let animationId = null;
+let isCivicActive = false;
+let civicX = -200;
 
 const schemes = {
     classic: {
@@ -29,60 +37,79 @@ const schemes = {
         "--text": "#0b141a"
     },
     civic: {
-        "--background": "#050607",        // near-black (matches background)
-        "--primary": "#1a1d20",           // deep charcoal (body shadows)
-        "--secondary": "#2c3136",         // mid gray (body panels)
-        "--accent": "#6b7280",            // metallic highlight (edges/reflections)
+        "--background": "#050607",
+        "--primary": "#1a1d20",
+        "--secondary": "#2c3136",
+        "--accent": "#6b7280",
         "--border": "rgba(255, 255, 255, 0.06)",
-        "--red": "#ff3b3b",               // sharper red (taillight vibe)
-        "--text": "#f1f5f9"               // crisp white for contrast
+        "--red": "#ff3b3b",
+        "--text": "#f1f5f9"
     }
-    // civic: {
-    //     // The --background property uses both an image and a fallback color (#0f1418).
-    //     // If the image fails to load, the fallback color will be used.
-    //     "--background": "#0f1418",
-    //     "--primary": "#5f6f7a",           // main body gray-blue
-    //     "--secondary": "#7f919d",         // lighter metallic tone
-    //     "--accent": "#a9bcc8",            // highlight/reflection color
-    //     "--border": "rgba(255, 255, 255, 0.08)",
-    //     "--red": "#d94b4b",               // slightly muted red to match tone
-    //     "--text": "#e3eaf0"               // soft white (not harsh)
-    // }
 };
-// 1. Get an array of the theme names ['classic', 'dark', 'light']
+
 const schemeNames = Object.keys(schemes);
 
-// --- 1. THE APPLY FUNCTION ---
-// A reusable function to apply a scheme by name
 const applyScheme = (name) => {
     const root = document.documentElement;
     const colors = schemes[name];
-    
+
     for (const [prop, value] of Object.entries(colors)) {
         root.style.setProperty(prop, value);
     }
-    
-    // Save to local storage
-    localStorage.setItem("selected-theme", name);
-};
-applyScheme("civic"); // Apply the civic theme as default on load
 
-// --- 2. THE INITIALIZATION ---
-// When the script runs, check if there's a saved theme; 
-// otherwise, default to 'classic'
-const savedTheme = localStorage.getItem("selected-theme") || "classic";
+    localStorage.setItem("selected-theme", name);
+
+    // ✅ ADD THIS LINE RIGHT HERE
+    document.body.classList.toggle("civic-active", name === "civic");
+
+    // 🚗 Handle civic activation
+    if (name === "civic") {
+        isCivicActive = true;
+        document.querySelector(".header h1").textContent = "Honda Civic Proofing";
+
+        if (!animationId) {
+            civicloop();
+        }
+    } else {
+        isCivicActive = false;
+        document.querySelector(".header h1").textContent = "Dough Proofing";
+
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+};
+
+// --- INIT ---
+const savedThemeRaw = localStorage.getItem("selected-theme");
+const savedTheme = schemeNames.includes(savedThemeRaw) ? savedThemeRaw : "classic";
 let currentIndex = schemeNames.indexOf(savedTheme);
 applyScheme(savedTheme);
 
-// --- 3. THE EVENT LISTENER ---
+// --- BUTTON ---
 button.addEventListener("click", () => {
     currentIndex = (currentIndex + 1) % schemeNames.length;
     const nextTheme = schemeNames[currentIndex];
     applyScheme(nextTheme);
-    if (nextTheme === "civic") {
-        document.querySelector(".civic").style.display = "block";
-    } else {
-        document.querySelector(".civic").style.display = "none";
-    }
+
     button.textContent = `Color Scheme: ${nextTheme.charAt(0).toUpperCase() + nextTheme.slice(1)}`;
 });
+function civicloop() {
+    if (!isCivicActive) return;
+
+    // 🚗 move entire car + rims together
+    wrapper.style.transform = `translate(${civicX}%, -100%)`;
+
+    // 🛞 spin rims based on movement (feels realistic)
+    const rotation = civicX * 12.2/1.5;
+
+    rims.forEach(rim => {
+        rim.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+    });
+
+    civicX += 0.2;
+    if (civicX > 150) civicX = -200;
+
+    animationId = requestAnimationFrame(civicloop);
+}
