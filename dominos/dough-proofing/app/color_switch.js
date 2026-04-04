@@ -66,6 +66,7 @@ const applyScheme = (name) => {
     if (name === "civic") {
         isCivicActive = true;
         document.querySelector(".header h1").textContent = "Honda Civic Proofing";
+        document.querySelector(".header img").src = "../../src/honda.png";
 
         if (!animationId) {
             civicloop();
@@ -73,6 +74,7 @@ const applyScheme = (name) => {
     } else {
         isCivicActive = false;
         document.querySelector(".header h1").textContent = "Dough Proofing";
+        document.querySelector(".header img").src = "../../src/icon-newgen.png";
 
         if (animationId) {
             cancelAnimationFrame(animationId);
