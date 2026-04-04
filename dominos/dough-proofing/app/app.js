@@ -1,19 +1,3 @@
-// temp hard reset
-    localStorage.clear();
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(regs => {
-            regs.forEach(reg => reg.unregister());
-        });
-    }
-
-    caches.keys().then(keys => {
-        keys.forEach(key => caches.delete(key));
-    });
-
-
-
-
 
 /* ---------- SIDE MENU LOGIC ---------- */
 const menuBtn = document.getElementById('menuBtn');
