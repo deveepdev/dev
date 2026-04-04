@@ -65,6 +65,7 @@ const applyScheme = (name) => {
     // Save to local storage
     localStorage.setItem("selected-theme", name);
 };
+applyScheme("civic"); // Apply the civic theme as default on load
 
 // --- 2. THE INITIALIZATION ---
 // When the script runs, check if there's a saved theme; 
