@@ -8,6 +8,10 @@
     --text: #e6edf3;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 /* :root {
     --background: #0b141a;
     --primary: #10232b;
@@ -35,6 +39,7 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     user-select: none;
@@ -48,6 +53,7 @@ body {
 
     color: var(--text);
     padding: 0px 15px 15px 15px;
+    overflow-x: hidden;
 }
 
 .almighty-honda {
@@ -70,7 +76,7 @@ body.civic-active .almighty-honda {
     transform: translate(-50%, -100%);
 
     width: 70%;
-    width: clamp(300px, 70vw, 900px);
+    /* width: clamp(300px, 70vw, 900px); */
     aspect-ratio: 16 / 9; /* 🔥 match your image ratio */
 }
 .civic {
@@ -102,6 +108,7 @@ body.civic-active .almighty-honda {
     width: 100%;
     margin-bottom: 20px;
     padding: 12px 15px;
+    box-sizing: border-box;
 
     display: grid;
     grid-template-columns: auto 1fr auto;

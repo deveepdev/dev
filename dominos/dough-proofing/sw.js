@@ -1,4 +1,4 @@
-const CACHE = "dough-app-v3";
+const CACHE = "dough-app-v6";
 
 self.addEventListener("install", e => {
   e.waitUntil(
