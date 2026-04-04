@@ -44,12 +44,24 @@ input[type="number"] {
 body {
     font-family: Arial, sans-serif;
     background: var(--background);
+    background-size: cover;
+    background-color: #0f1418;
     /* background: linear-gradient(to t, var(--background), var(--primary)); */
 
     color: var(--text);
     padding: 0px 15px 15px 15px;
 }
 
+.civic {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+
+    z-index: -999;
+}
 
 .header {
     /* position: fixed; */

@@ -27,7 +27,27 @@ const schemes = {
         "--border": "rgba(0, 0, 0, 0.1)",
         "--red": "#ec7f7f",
         "--text": "#0b141a"
+    },
+    civic: {
+        "--background": "#050607",        // near-black (matches background)
+        "--primary": "#1a1d20",           // deep charcoal (body shadows)
+        "--secondary": "#2c3136",         // mid gray (body panels)
+        "--accent": "#6b7280",            // metallic highlight (edges/reflections)
+        "--border": "rgba(255, 255, 255, 0.06)",
+        "--red": "#ff3b3b",               // sharper red (taillight vibe)
+        "--text": "#f1f5f9"               // crisp white for contrast
     }
+    // civic: {
+    //     // The --background property uses both an image and a fallback color (#0f1418).
+    //     // If the image fails to load, the fallback color will be used.
+    //     "--background": "#0f1418",
+    //     "--primary": "#5f6f7a",           // main body gray-blue
+    //     "--secondary": "#7f919d",         // lighter metallic tone
+    //     "--accent": "#a9bcc8",            // highlight/reflection color
+    //     "--border": "rgba(255, 255, 255, 0.08)",
+    //     "--red": "#d94b4b",               // slightly muted red to match tone
+    //     "--text": "#e3eaf0"               // soft white (not harsh)
+    // }
 };
 // 1. Get an array of the theme names ['classic', 'dark', 'light']
 const schemeNames = Object.keys(schemes);
@@ -58,5 +78,10 @@ button.addEventListener("click", () => {
     currentIndex = (currentIndex + 1) % schemeNames.length;
     const nextTheme = schemeNames[currentIndex];
     applyScheme(nextTheme);
+    if (nextTheme === "civic") {
+        document.querySelector(".civic").style.display = "block";
+    } else {
+        document.querySelector(".civic").style.display = "none";
+    }
     button.textContent = `Color Scheme: ${nextTheme.charAt(0).toUpperCase() + nextTheme.slice(1)}`;
 });
