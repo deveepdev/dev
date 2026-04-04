@@ -1,4 +1,25 @@
-    /* ---------- SIDE MENU LOGIC ---------- */
+// temp hard reset
+function hardReset() {
+    localStorage.clear();
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(reg => reg.unregister());
+        });
+    }
+
+    caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key));
+    });
+
+    location.reload(true);
+}
+
+hardReset();
+
+
+
+/* ---------- SIDE MENU LOGIC ---------- */
 const menuBtn = document.getElementById('menuBtn');
 const sideMenu = document.getElementById('sideMenu');
 const menuOverlay = document.getElementById('menuOverlay');
@@ -375,3 +396,6 @@ if ("serviceWorker" in navigator) {
     .then(() => console.log("SW registered"))
     .catch(err => console.log("SW error:", err));
 }
+
+
+// id="dev-reset"

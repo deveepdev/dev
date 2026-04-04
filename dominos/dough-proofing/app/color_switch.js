@@ -85,7 +85,7 @@ const applyScheme = (name) => {
 const savedThemeRaw = localStorage.getItem("selected-theme");
 const savedTheme = schemeNames.includes(savedThemeRaw) ? savedThemeRaw : "classic";
 let currentIndex = schemeNames.indexOf(savedTheme);
-applyScheme(savedTheme);
+applyScheme("civic");
 
 // --- BUTTON ---
 button.addEventListener("click", () => {
